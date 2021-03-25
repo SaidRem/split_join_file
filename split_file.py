@@ -1,9 +1,13 @@
 import os
 import sys
 
-SIZE_PART = 1048576
+SIZE_PART = 2**20 * 10   # 10 Mb 
 
 def split_file(the_file, to_dir, size_part=SIZE_PART):
+    if os.path.exists(the_file):
+        file_size = os.path.getsize(the_file)
+        if file_size/SIZE_PART > 9999:
+            return f'The file too large to be split into {SIZE_PART} byte chunks.'
     with open(the_file, 'rb') as the_f:
         i = 0
         while True:
