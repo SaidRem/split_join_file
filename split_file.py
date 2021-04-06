@@ -29,10 +29,10 @@ def split_file(the_file, to_dir, size_part=SIZE_PART):
         while True:
             part_name = 'part_{:03}'.format(i)
             i += 1
+            p = the_f.read(SIZE_PART)
+            if not p:
+                break
             with open(os.path.join(to_dir, part_name), 'wb') as par_f:
-                p = the_f.read(SIZE_PART)
-                if not p:
-                    break
                 par_f.write(p)
 
 
