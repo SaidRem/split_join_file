@@ -20,10 +20,20 @@ def split_file(the_file, to_dir, size_part=SIZE_PART):
         else:
             ans = input(f'The file {os.path.basename(the_file)} ' 
                         f'will be divided into {num_parts}. Continue? (y/n) ')
-            if ans.strip() == 'n':
+            if ans.lower() == 'n':
+                print('Shutting down')
                 return None
     else:
         print('Enter correct path to a file')
+    
+    if not os.path.exists(to_dir):
+        ans = input(f'Create new folder: {os.path.basename(to_dir)} '
+                    f'in directory {os.path.dirname(to_dir)} (y/n) ')
+        if ans.lower() == 'y':
+            os.mkdir(to_dir)
+        else:
+            print('Shutting down')
+            return None
     with open(the_file, 'rb') as the_f:
         i = 0
         while True:
@@ -44,4 +54,5 @@ if __name__ == '__main__':
         split_file(the_file, to_dir)
     else:
         the_file, to_dir = sys.argv[1:3]
+        split_file(the_file, to_dir)
         
