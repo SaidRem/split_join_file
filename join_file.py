@@ -3,9 +3,13 @@ import sys
 import re
 
 
-READ_CHUNK = 2*20 * 10
+READ_CHUNK = 2*20 * 10    # 2*20 = 1 Mb
 
 def test_parts(file_parts):
+    """
+    Checking the folder contains 
+    only parts of the file.
+    """
     pat = re.compile(r'^part_\d{3}$')
     for p in file_parts:
         if not pat.match(p):
@@ -28,7 +32,7 @@ def join_parts(dir_name, file_name):
                     if not part_bytes:
                         break
                     the_f.write(part_bytes)
-    return "Success"
+    return "File build was successful"
 
 
 if __name__ == '__main__':

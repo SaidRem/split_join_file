@@ -44,8 +44,12 @@ def split_file(the_file, to_dir, size_part=SIZE_PART):
                 break
             with open(os.path.join(to_dir, part_name), 'wb') as par_f:
                 par_f.write(p)
+    return "File splitting completed successfully"
 
-
+# TODO
+# Mode:
+# 1. Split big file for writing on several CD
+# 2. Split big file for writing on several DVD
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
