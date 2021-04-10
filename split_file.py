@@ -1,9 +1,10 @@
 import os
 import sys
 
-SIZE_PART = 2**20 * 10   # 10 Mb 
+SIZE_PART = 2**20 * 10  # 10 Mb
+ONE_HUND = 2**20 * 100  # 100 Mb
 
-def split_file(the_file, to_dir, size_part=SIZE_PART):
+def split_file(the_file, to_dir, size_part=SIZE_PART, mod=False):
     """
     The function divides the_file into parts and places it
     in to_dir.
@@ -12,11 +13,13 @@ def split_file(the_file, to_dir, size_part=SIZE_PART):
     2 - folder path for parts of the file;
     3 - file part size (default: SIZE_PART (10 mb));
     """
-    if os.path.isfile(the_file):                       # check for path exists to the file
+    if mod:
+        size_part *= 60  # 600 Mb
+    if os.path.isfile(the_file):                       # checking if the path to the file exists
         file_size = os.path.getsize(the_file)
-        num_parts = int(file_size/SIZE_PART) + 1
+        num_parts = int(file_size/size_part) + 1
         if num_parts > 999:
-            return f'The file is too large to split into {SIZE_PART} byte parts.'
+            return f'The file is too large to split into {size_part} byte parts.'
         else:
             ans = input(f'The file {os.path.basename(the_file)} ' 
                         f'will be divided into {num_parts}. Continue? (y/n) ')
@@ -39,11 +42,22 @@ def split_file(the_file, to_dir, size_part=SIZE_PART):
         while True:
             part_name = 'part_{:03}'.format(i)
             i += 1
-            p = the_f.read(SIZE_PART)
+            max_size = 0
+            if size_part > ONE_HUND:
+                par_f = open(os.path.join(to_dir, part_name), 'wb')
+                while max_size < size_part:
+                    p = the_f.read(ONE_HUND)
+                    max_size += ONE_HUND
+                    if not p:
+                        break
+                    par_f.write(p)
+            else:
+                par_f = open(os.path.join(to_dir, part_name), 'wb')
+                par_f.write(p)
+            par_f.close()
             if not p:
                 break
-            with open(os.path.join(to_dir, part_name), 'wb') as par_f:
-                par_f.write(p)
+            
     return "File splitting completed successfully"
 
 # TODO
@@ -52,10 +66,14 @@ def split_file(the_file, to_dir, size_part=SIZE_PART):
 # 2. Split big file for writing on several DVD
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
+    if len(sys.argv) == 1:
+        size_f = input('Enter size of file in Mb')
         the_file = input('Enter path to file for split:\n')
         to_dir = input('Enter target directory for storing parts of the splitting file:\n')
-        split_file(the_file, to_dir)
+        if int(size_f) > 700:
+            split_file(the_file, to_dir, mod=True)
+        else:
+            split_file(the_file, to_dir)
     else:
         the_file, to_dir = sys.argv[1:3]
         split_file(the_file, to_dir)
