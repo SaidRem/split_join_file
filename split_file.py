@@ -13,8 +13,10 @@ def split_file(the_file, to_dir, size_part=SIZE_PART, mod=False):
     2 - folder path for parts of the file;
     3 - file part size (default: SIZE_PART (10 mb));
     """
-    if mod:
-        size_part *= 60  # 600 Mb
+    if mod == 'cd':
+        size_part *= 70  # 700 Mb
+    elif mod == 'dvd':
+        size_part *= 450  # 4500 Mb
     if os.path.isfile(the_file):                       # checking if the path to the file exists
         file_size = os.path.getsize(the_file)
         num_parts = int(file_size/size_part) + 1
@@ -60,18 +62,17 @@ def split_file(the_file, to_dir, size_part=SIZE_PART, mod=False):
             
     return "File splitting completed successfully"
 
-# TODO
-# Mode:
-# 1. Split big file for writing on several CD
-# 2. Split big file for writing on several DVD
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
-        size_f = input('Enter size of file in Mb')
+        my_mode = input('For CD size (700 Mb part) or DVD size (4500 Mb part)?\n'
+                        '(Enter cd/dvd) => ')
         the_file = input('Enter path to file for split:\n')
         to_dir = input('Enter target directory for storing parts of the splitting file:\n')
-        if int(size_f) > 700:
-            split_file(the_file, to_dir, mod=True)
+        if my_mode.strip().lower() == 'cd':
+            split_file(the_file, to_dir, mod='cd')
+        elif my_mode.strip().lower() == 'dvd':
+            split_file(the_file, to_dir, mod='dvd')
         else:
             split_file(the_file, to_dir)
     else:
