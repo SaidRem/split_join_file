@@ -1,26 +1,28 @@
 import os
 import sys
 
-SIZE_PART = 2**20 * 10  # 10 Mb
+ONE_MB = 2**20  # 1 Mb
 ONE_HUND = 2**20 * 100  # 100 Mb
 
-def split_file(the_file, to_dir, size_part=SIZE_PART, mod=False):
+
+def split_file(the_file, to_dir, size_part=ONE_MB, mod=False):
     """
     The function divides the_file into parts and places it
     in to_dir.
     Takes as arguments:
     1 - the path to the file;
     2 - folder path for parts of the file;
-    3 - file part size (default: SIZE_PART (10 mb));
+    3 - file part size (default: ONE_MB (1 mb));
+    4 - mod - cd = 700 Mb part; dvd = 4500Mb part;
     """
     if mod == 'cd':
-        size_part *= 70  # 700 Mb
+        size_part *= 700  # 700 Mb
     elif mod == 'dvd':
-        size_part *= 450  # 4500 Mb
+        size_part *= 4500  # 4500 Mb
     if os.path.isfile(the_file):                       # checking if the path to the file exists
         file_size = os.path.getsize(the_file)
         num_parts = int(file_size/size_part) + 1
-        if num_parts > 999:
+        if num_parts > 99:
             return f'The file is too large to split into {size_part} byte parts.'
         else:
             ans = input(f'The file {os.path.basename(the_file)} ' 
@@ -40,7 +42,7 @@ def split_file(the_file, to_dir, size_part=SIZE_PART, mod=False):
             print('Shutting down')
             return None
     with open(the_file, 'rb') as the_f:
-        i = 0
+        i = 1
         while True:
             part_name = 'part_{:03}'.format(i)
             i += 1
