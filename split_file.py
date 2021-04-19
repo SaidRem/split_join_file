@@ -12,7 +12,7 @@ def split_file(the_file, to_dir, size_part=ONE_MB, mod=False):
     Takes as arguments:
     1 - the path to the file;
     2 - folder path for parts of the file;
-    3 - file part size (default: ONE_MB (1 mb));
+    3 - file part size (default: ONE_MB (1048576 bytes = 1 mb));
     4 - mod - cd = 700 Mb part; dvd = 4500Mb part;
     """
     if mod == 'cd':
@@ -27,7 +27,7 @@ def split_file(the_file, to_dir, size_part=ONE_MB, mod=False):
         else:
             ans = input(f'The file {os.path.basename(the_file)} ' 
                         f'will be divided into {num_parts}. Continue? (y/n) ')
-            if ans.lower() == 'n':
+            if ans.rstrip().lower() == 'n':
                 print('Shutting down')
                 return None
     else:
@@ -65,7 +65,7 @@ def split_file(the_file, to_dir, size_part=ONE_MB, mod=False):
     return "File splitting completed successfully"
 
 
-if __name__ == '__main__':
+def main():
     if len(sys.argv) == 1:
         my_mode = input('For CD size (700 Mb part) or DVD size (4500 Mb part)?\n'
                         '(Enter cd/dvd) => ')
@@ -78,6 +78,12 @@ if __name__ == '__main__':
         else:
             split_file(the_file, to_dir)
     else:
-        the_file, to_dir = sys.argv[1:3]
-        split_file(the_file, to_dir)
+        if len(sys.argv) == 3:
+            the_file, to_dir = sys.argv[1:3]
+            split_file(the_file, to_dir)
+
+
+if __name__ == '__main__':
+    main()
+    
         
