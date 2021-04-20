@@ -79,8 +79,11 @@ def main():
             split_file(the_file, to_dir)
     else:
         if len(sys.argv) == 3:
-            the_file, to_dir = sys.argv[1:3]
+            the_file, to_dir = sys.argv[1:]
             split_file(the_file, to_dir)
+        elif len(sys.argv) == 4:
+            the_file, to_dir, mod = sys.argv[1:]
+            split_file(the_file=the_file, to_dir=to_dir, mod=mod)
 
 
 if __name__ == '__main__':
