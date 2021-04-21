@@ -19,19 +19,17 @@ def split_file(the_file, to_dir, size_part=ONE_MB, mod=False):
         size_part *= 700  # 700 Mb
     elif mod == 'dvd':
         size_part *= 4500  # 4500 Mb
-    if os.path.isfile(the_file):                       # checking if the path to the file exists
-        file_size = os.path.getsize(the_file)
-        num_parts = int(file_size/size_part) + 1
-        if num_parts > 99:
-            return f'The file is too large to split into {size_part} byte parts.'
-        else:
-            ans = input(f'The file {os.path.basename(the_file)} ' 
-                        f'will be divided into {num_parts}. Continue? (y/n) ')
-            if ans.rstrip().lower() == 'n':
-                print('Shutting down')
-                return None
+                    
+    file_size = os.path.getsize(the_file)
+    num_parts = int(file_size/size_part) + 1
+    if num_parts > 99:
+        return f'The file is too large to split into {size_part} byte parts.'
     else:
-        print('Enter correct path to a file')
+        ans = input(f'The file {os.path.basename(the_file)} ' 
+                    f'will be divided into {num_parts}. Continue? (y/n) ')
+        if ans.rstrip().lower() == 'n':
+            print('Shutting down')
+            return None
     
     if not os.path.exists(to_dir):
         ans = input(f'Create new folder: {os.path.basename(to_dir)} '
@@ -64,13 +62,41 @@ def split_file(the_file, to_dir, size_part=ONE_MB, mod=False):
             
     return "File splitting completed successfully"
 
+def test_path(path_to_file, path_to_dir):
+    test_file = ''
+    test_dir = ''
+    if os.path.exists(path_to_file):
+        if os.path.isfile(path_to_file):
+            test_file = True
+        else:
+            test_file = 'Enter path to the file.'
+    else:
+        test_file = 'File does not exists. Enter correct path to a file.'
+
+    if os.path.exists(path_to_dir):
+        if os.path.isdir(path_to_dir):
+            test_dir = True
+        else:
+            test_dir = 'Enter path to a directory for storing parts of file.'
+    else:
+        test_dir = 'Directory does not exists. Enter correct path to a directory.'
+    
+    return test_file, test_dir
+
+            
 
 def main():
     if len(sys.argv) == 1:
-        my_mode = input('For CD size (700 Mb part) or DVD size (4500 Mb part)?\n'
+        my_mode = input('Splitting for CD size (700 Mb part) or DVD size (4500 Mb part)?\n'
                         '(Enter cd/dvd) => ')
-        the_file = input('Enter path to file for split:\n')
-        to_dir = input('Enter target directory for storing parts of the splitting file:\n')
+        while True:
+            the_file = input('Enter path to file for split:\n')
+            to_dir = input('Enter target directory for storing parts of the splitting file:\n')
+            test_file, test_dir = test_path(the_file, to_dir)
+            if test_file is True and test_dir is True:
+                break
+            else:
+                print(f'Test file: {test_file}\nTest directory: {test_dir}')
         if my_mode.strip().lower() == 'cd':
             split_file(the_file, to_dir, mod='cd')
         elif my_mode.strip().lower() == 'dvd':
