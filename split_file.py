@@ -41,24 +41,29 @@ def split_file(the_file, to_dir, size_part=ONE_MB, mod=False):
             return None
     with open(the_file, 'rb') as the_f:
         i = 1
-        while True:
-            part_name = 'part_{:03}'.format(i)
-            i += 1
-            max_size = 0
-            if size_part > ONE_HUND:
-                par_f = open(os.path.join(to_dir, part_name), 'wb')
-                while max_size < size_part:
-                    p = the_f.read(ONE_HUND)
-                    max_size += ONE_HUND
-                    if not p:
-                        break
+        if size_part > ONE_HUND:
+            while True:
+                part_name = 'part_{:03}'.format(i)
+                i += 1
+                max_size = 0
+                with open(os.path.join(to_dir, part_name), 'wb') as par_f:
+                    while max_size < size_part:
+                        p = the_f.read(ONE_HUND)
+                        max_size += ONE_HUND
+                        if not p:
+                            break
+                        par_f.write(p)
+                if not p:
+                    break
+        else:
+            while True:
+                part_name = 'part_{:03}'.format(i)
+                i += 1
+                p = the_f.read(size_part)
+                if not p:
+                    break
+                with open(os.path.join(to_dir, part_name), 'wb') as par_f:
                     par_f.write(p)
-            else:
-                par_f = open(os.path.join(to_dir, part_name), 'wb')
-                par_f.write(p)
-            par_f.close()
-            if not p:
-                break
             
     return "File splitting completed successfully"
 
@@ -71,7 +76,7 @@ def test_path(path_to_file, path_to_dir):
         else:
             test_file = 'Enter path to the file.'
     else:
-        test_file = 'File does not exists. Enter correct path to a file.'
+        test_file = 'File does not exists. Enter correct path to file.'
 
     if os.path.exists(path_to_dir):
         if os.path.isdir(path_to_dir):
@@ -83,7 +88,6 @@ def test_path(path_to_file, path_to_dir):
     
     return test_file, test_dir
 
-            
 
 def main():
     if len(sys.argv) == 1:
@@ -91,7 +95,7 @@ def main():
                         '(Enter cd/dvd) => ')
         while True:
             the_file = input('Enter path to file for split:\n')
-            to_dir = input('Enter target directory for storing parts of the splitting file:\n')
+            to_dir = input('Enter empty directory for storing parts of file:\n')
             test_file, test_dir = test_path(the_file, to_dir)
             if test_file is True and test_dir is True:
                 break
