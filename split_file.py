@@ -71,18 +71,12 @@ def test_path(path_to_file, path_to_dir):
     test_file = ''
     test_dir = ''
     if os.path.exists(path_to_file):
-        if os.path.isfile(path_to_file):
-            test_file = True
-        else:
-            test_file = 'Enter path to the file.'
+        test_file = True if os.path.isfile(path_to_file) else 'Enter path to a file'
     else:
         test_file = 'File does not exists. Enter correct path to file.'
 
     if os.path.exists(path_to_dir):
-        if os.path.isdir(path_to_dir):
-            test_dir = True
-        else:
-            test_dir = 'Enter path to a directory for storing parts of file.'
+        test_dir = True if os.path.isdir(path_to_dir) else 'Enter path to a directory for storing parts of file.'
     else:
         test_dir = 'Directory does not exists. Enter correct path to a directory.'
     
