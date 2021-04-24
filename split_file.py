@@ -18,7 +18,7 @@ def split_file(the_file, to_dir, size_part=ONE_MB, mod=False):
     if mod == 'cd':
         size_part *= 700  # 700 Mb
     elif mod == 'dvd':
-        size_part *= 4500  # 4500 Mb
+        size_part *= 4400  # 4400 Mb
                     
     file_size = os.path.getsize(the_file)
     num_parts = int(file_size/size_part) + 1
