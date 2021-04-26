@@ -68,8 +68,9 @@ def split_file(the_file, to_dir, size_part=ONE_MB, mod=False):
     return "File splitting completed successfully"
 
 def test_path(path_to_file, path_to_dir):
-    test_file = ''
-    test_dir = ''
+    """
+    Checking for file and directory existence.
+    """
     if os.path.exists(path_to_file):
         test_file = True if os.path.isfile(path_to_file) else 'Enter path to a file'
     else:
